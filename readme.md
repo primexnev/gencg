@@ -6,7 +6,7 @@
 [★★★ This repository is published here ★★★](https://digitalideation.github.io/gencg_h2501/)
 
 ## 📂 Repository Structure
-
+ #### SIMPLE CHANGE TO UNDERSTAND
 ### 📚 Lessons
 
 - [`lessons/`](lessons/) - Contains all 12 lessons with structured content
