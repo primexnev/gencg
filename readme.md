@@ -1,4 +1,4 @@
-# Day 01
+# Nevzat's GENCG Portfolio
 
 ## Computing without computer
 
