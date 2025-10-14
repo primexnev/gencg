@@ -1,4 +1,4 @@
-# Day#01 Learning the basics
+# Readme
 
 ## Nevzat's GENCG Portfolio
 
