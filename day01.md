@@ -1,6 +1,6 @@
-# Nevzat's GENCG Portfolio
+# Day#01 Learning the basics
 
-## Day#01 Learning the basics
+## Nevzat's GENCG Portfolio
 
 ### Sollewit: Wall drawing
 
@@ -63,30 +63,4 @@ I’m happy that I managed to understand how to position and color different ele
 Next time, I want to explore adding more details or animations, such as clouds, shadows, or small movement in the sun.  
 This project helped me realize that even with minimal code, it’s possible to create a meaningful and visually complete scene.
 
-### Webcam tests
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-
-{% raw %}
-<iframe src="content/day01/01/embed.html" width="100%" height="450" frameborder="no"></iframe>
-{% endraw %}
-
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-
-{% raw %}
-<iframe src="content/day01/02/embed.html" width="100%" height="450" frameborder="no"></iframe>
-{% endraw %}
-
-## Computing with computer
-
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-
-> At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-
-{% raw %}
-<iframe src="content/day01/03/embed.html" width="100%" height="450" frameborder="no"></iframe>
-{% endraw %}
-
-* Lorem ipsum dolor sit amet
-* Consetetur sadipscing elitr, sed diam nonumy.
-* At vero eos et accusam et justo duo dolores et ea rebum. 
