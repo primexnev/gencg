@@ -77,7 +77,7 @@ function drawHex(cx, cy, rr) {
 }
 
 ```
-# Week 01 – Simple House Scene
+# Week 2
 
 ## Exploration & Experimentation
 In these projects, I experimented with creating grid-based patterns using p5.js.
