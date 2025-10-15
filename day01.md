@@ -2,7 +2,7 @@
 
 ## Nevzat's GENCG Portfolio
 
-### Sollewit: Wall drawing
+###
 
 In this project, I created a simple house scene using p5.js. I used basic shapes like rectangles, triangles, and circles to draw the background, house, roof, door, window, and sun. The fill() function allowed me to set different colors for each part of the drawing. This project helped me understand how simple geometric shapes can be combined to form meaningful objects in a digital scene.
 
