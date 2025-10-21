@@ -6,7 +6,7 @@
 In this project, I created a colorful geometric pattern inspired by the visual examples we explored during the class. I was particularly influenced by the reference images from the lesson materials that focused on repeating circular and wave-like forms. Using p5.js, I experimented with arcs arranged in a grid to create a smooth, overlapping rhythm. I introduced multiple bright colors to make the pattern feel playful and dynamic, resembling layered rainbows across the canvas. This helped me understand how repetition, symmetry, and color harmony can transform a simple shape into a visually engaging composition.
 
 
-![Example Image](content\day01\weektwo.png)
+![Example Image](./content/day01/weektwo.png)
 
 
 <iframe src="content/day01/01/embed.html" width="100%" height="450" frameborder="no"></iframe>
