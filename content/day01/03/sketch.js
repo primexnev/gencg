@@ -1,127 +1,211 @@
-// Based on the code P_2_0_03.pde from
-// Generative Gestaltung, ISBN: 978-3-87439-759-9
+let t=0,pg,stars=[];
+const P={bg:"#0B0F14",gold:"#E6C14A",aqua:"#20E3D6"};
 
-// Global var
-let canvas;
-let p = false;
-let backgroundColor, fillColor;
-
-function setup() {
-  // Canvas setup
-  canvas = createCanvas(windowWidth, windowHeight);
-
-  // Detect screen density (retina)
-  var density = displayDensity();
-  pixelDensity(density);
-
-  // Colors and drawing modes
-  colorMode(HSL, 360, 100, 100, 100);
-  fillColor = color(0, 10);
-  backgroundColor = color(120, 50, 50, 100);
-  background(backgroundColor);
-  smooth();
+function setup(){
+  createCanvas(windowWidth,windowHeight);
+  pixelDensity(1);
+  pg=createGraphics(width,height);
+  drawGlowBackdrop();
+  for(let i=0;i<160;i++){
+    stars.push({
+      r: random(min(width,height)*0.18, min(width,height)*0.45),
+      a: random(TWO_PI),
+      s: random(0.3,1.8),
+      sp: random(0.0008,0.003)
+    });
+  }
+  noCursor();
 }
 
-function draw() {
-  noFill();
+function windowResized(){
+  resizeCanvas(windowWidth,windowHeight);
+  pg=createGraphics(width,height);
+  drawGlowBackdrop();
+}
 
-  switch (options.color) {
-    case 1:
-      fillColor = color(0, 50, 50, 10);
-      break;
-    case 2:
-      fillColor = color(192, 100, 64, 10);
-      break;
-    case 3:
-      fillColor = color(52, 100, 71, 10);
-      break;
+function drawGlowBackdrop(){
+  pg.clear();
+  pg.noStroke();
+  pg.background(P.bg);
+  for(let i=0;i<5000;i++){
+    const x=random(width),y=random(height);
+    const a=random(12);
+    pg.fill(255,255,255,a);
+    pg.circle(x,y,random(0.3,1.1));
+  }
+  for(let r=0;r<160;r++){
+    const a=map(r,0,159,0,70);
+    pg.fill(230,193,74,a*0.16);
+    pg.circle(width/2,height/2, max(width,height)*1.3 - r*6);
+  }
+}
+
+function draw(){
+  background(P.bg);
+  image(pg,0,0);
+  translate(width/2,height/2);
+
+  const R=min(width,height)*0.38;
+  const now=new Date();
+  const hr=((now.getHours()%12)+now.getMinutes()/60)/12;
+  const mn=(now.getMinutes()+now.getSeconds()/60)/60;
+  const sc=(now.getSeconds()+now.getMilliseconds()/1000)/60;
+
+  push();
+  rotate(sin(frameCount*0.0012)*0.06);
+  ring(R*1.02, 6, 0.006, P.gold, 6);
+  ring(R*0.86, 9, -0.01, P.aqua, 5);
+  ring(R*0.70, 12, 0.015, P.gold, 4);
+  arcRunes(R*0.56, 32, 0.007, P.aqua);
+  arcRunes(R*0.44, 24, -0.011, P.gold);
+  lissajousSigil(R*0.52, 0.65, P.aqua);
+  lissajousSigil(R*0.35, 1.05, P.gold);
+  pop();
+
+  for(let s of stars){
+    s.a+=s.sp;
+    const x=cos(s.a)*s.r,y=sin(s.a)*s.r;
+    noStroke(); fill(255,235,180,140);
+    circle(x,y,s.s);
   }
 
-  if (p) {
+  hand(sc, R*0.92, 2.6, color(P.aqua));
+  hand(mn, R*0.75, 5, color(P.gold));
+  hand(hr, R*0.55, 7.5, color(P.gold));
+
+  centerGem();
+
+  timeBadge(now);
+
+  t+=0.006;
+}
+
+function ring(r, spokes, rotSpeed, col, weight){
+  push();
+  rotate(frameCount*rotSpeed);
+  noFill();
+  stroke(col); strokeWeight(weight);
+  circle(0,0,r*2);
+  strokeWeight(max(1,weight*0.5));
+  for(let i=0;i<spokes;i++){
+    const a=TWO_PI*(i/spokes);
+    const n=(noise(i*0.2+t)-0.5)*r*0.04;
+    const x1=cos(a)*(r*0.86+n), y1=sin(a)*(r*0.86+n);
+    const x2=cos(a)*(r*1.04+n), y2=sin(a)*(r*1.04+n);
+    line(x1,y1,x2,y2);
+  }
+  pop();
+}
+
+function arcRunes(r, count, rotSpeed, col){
+  push();
+  rotate(frameCount*rotSpeed);
+  noFill();
+  stroke(col); strokeWeight(2);
+  const dash=PI*1.3/count;
+  for(let i=0;i<count;i++){
+    const a=i*TWO_PI/count;
+    arc(0,0,r*2, r*2, a+0.1, a+0.1+dash);
     push();
-
-    translate(width / 2, height / 2);
-
-    const circleResolution = toInt(map(mouseY + 100, 0, height, 2, 10));
-    const radius = mouseX - width / 2 + 0.5;
-    const angle = TWO_PI / circleResolution;
-
-    strokeWeight(2);
-    fill(fillColor);
-
-    beginShape();
-
-    for (i = 0; i <= circleResolution; i++) {
-      var x = 0 + cos(angle * i) * radius;
-      var y = 0 + sin(angle * i) * radius;
-      vertex(x, y);
-    }
-
-    endShape();
-
+    const rr=r*0.92;
+    const x=cos(a+dash*0.5)*rr, y=sin(a+dash*0.5)*rr;
+    translate(x,y);
+    rotate(a*3.0);
+    glyph(col, r*0.06);
     pop();
   }
+  pop();
 }
 
-function mousePressed() {
-  p = true;
+function glyph(col, sz){
+  stroke(col); strokeWeight(2); noFill();
+  const k=sz;
+  line(-k,0,k,0);
+  line(0,-k*0.9,0,k*0.9);
+  push(); rotate(PI/4); rectMode(CENTER); rect(0,0,k*0.9,k*0.22,2); pop();
+  circle(0,0,k*0.55);
 }
 
-function mouseReleased() {
-  p = false;
-}
-
-function keyPressed() {
-  // Clear sketch
-  if (keyCode === 32) background(255); // 32 = SPACE BAR
-
-  if (key == "s" || key == "S") saveImage(width, height);
-
-  switch (key) {
-    case "1":
-      options.color = 1;
-      break;
-    case "2":
-      options.color = 2;
-      break;
-    case "3":
-      options.color = 3;
-      break;
+function lissajousSigil(r, speed, col){
+  noFill();
+  stroke(col); strokeWeight(1.8);
+  beginShape();
+  const n=260;
+  for(let i=0;i<=n;i++){
+    const u=i/n;
+    const a=TWO_PI*u;
+    const x=r*0.9*sin(3*a + frameCount*0.002*speed);
+    const y=r*0.9*sin(4*a + frameCount*0.003*speed + PI/6);
+    vertex(x,y);
   }
+  endShape();
 }
 
-// Tools
-
-// Make sketch full screen
-function goFullScreen() {
-  let isFullScreen = Boolean(fullscreen());
-  fullscreen(!isFullScreen);
+function hand(norm,len,w,col){
+  const a=-HALF_PI + TWO_PI*norm;
+  push();
+  rotate(a);
+  const g=color(red(col),green(col),blue(col),70);
+  noStroke(); fill(g);
+  for(let i=0;i<12;i++){
+    const rr=map(i,0,11,0,len);
+    circle(0,-rr,map(i,0,11,w*0.4,1));
+  }
+  stroke(col); strokeWeight(w);
+  line(0,0,0,-len);
+  glowDot(0,-len,col,w*1.2);
+  pop();
 }
 
-// Resize canvas when the window is resized
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight, false);
-  // This needs to be redrawn for some reason
-  background(backgroundColor);
+function glowDot(x,y,col,sz){
+  push();
+  translate(x,y);
+  noStroke();
+  for(let i=10;i>=1;i--){
+    const a=map(i,1,10,220,10);
+    fill(red(col),green(col),blue(col),a);
+    circle(0,0, map(i,1,10,sz*2.6,sz*0.6));
+  }
+  fill(255,240,200,230); circle(0,0,sz*0.5);
+  pop();
 }
 
-// Sketch is double clicked
-function doubleClicked() {
-  goFullScreen();
+function centerGem(){
+  push();
+  noStroke();
+  for(let i=12;i>=1;i--){
+    const a=map(i,1,12,220,20);
+    fill(230,193,74,a);
+    circle(0,0,map(i,1,12,36,10));
+  }
+  stroke(P.aqua); noFill(); strokeWeight(2);
+  rotate(frameCount*0.01);
+  polygon(0,0,16,6);
+  rotate(-frameCount*0.02);
+  polygon(0,0,11,5);
+  pop();
 }
 
-// Int conversion
-function toInt(value) {
-  return ~~value;
+function polygon(x,y,r,n){
+  beginShape();
+  for(let i=0;i<n;i++){
+    const a=TWO_PI*i/n;
+    vertex(x+cos(a)*r,y+sin(a)*r);
+  }
+  endShape(CLOSE);
 }
 
-// Timestamp
-function timestamp() {
-  return Date.now();
-}
-
-// Thumb
-function saveImage(w, h) {
-  let img = get(width / 2 - w / 2, height / 2 - h / 2, w, h);
-  save(img, "screenshot.jpg");
+function timeBadge(now){
+  const pad=n=>(n<10?"0":"")+n;
+  const ts=`${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  const ds=`${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()}`;
+  push();
+  translate(0,height*0.38);
+  textAlign(CENTER,CENTER);
+  noStroke();
+  fill(0,0,0,120); rectMode(CENTER);
+  rect(0,0, textWidth(ts)+90, 58, 10);
+  fill(P.gold); textSize(30); text(ts,0,-2);
+  fill(P.aqua); textSize(14); text(ds,0,18);
+  pop();
 }
