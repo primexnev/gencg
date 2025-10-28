@@ -6,9 +6,9 @@
 In this project, I created a colorful geometric pattern inspired by the visual examples we explored during the class. My main reference, however, came from the Doctor Strange scene where space bends and circular portals open in mid-air. The composition of glowing rings, floating rocks, and intersecting energy lines influenced the circular rhythm of my design.
 Using p5.js, I experimented with arcs arranged in a grid to recreate that sense of movement and dimensional distortion. I combined bright, contrasting colors to evoke the magical and cosmic feeling of the scene, turning simple shapes into an illusion of depth and flow. This project helped me understand how repetition, symmetry, and color harmony can convey motion and energy within a static digital composition.
 
-
-![Example Image](content\day01\03\week03image.png)
-
+{% raw %}
+![Example Image](./content/day01/03/week03image.jpg)
+{% endraw %}
 
 <iframe src="content/day01/03/embed.html" width="100%" height="450" frameborder="no"></iframe>
 
