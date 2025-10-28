@@ -10,7 +10,7 @@ Using p5.js, I experimented with arcs arranged in a grid to recreate that sense 
 ![Example Image](content\day01\03\week03image.png)
 
 
-<iframe src="content/day01/003/embed.html" width="100%" height="450" frameborder="no"></iframe>
+<iframe src="content/day01/03/embed.html" width="100%" height="450" frameborder="no"></iframe>
 
 
 ```js
