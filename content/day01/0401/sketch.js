@@ -1,211 +1,117 @@
-let t=0,pg,stars=[];
-const P={bg:"#0B0F14",gold:"#E6C14A",aqua:"#20E3D6"};
+// PEN-DRAWN SKETCH — p5.js
+// Hold mouse to draw. Press C to clear, S to save.
 
-function setup(){
-  createCanvas(windowWidth,windowHeight);
+let paperG, last, speedAvg = 0;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
   pixelDensity(1);
-  pg=createGraphics(width,height);
-  drawGlowBackdrop();
-  for(let i=0;i<160;i++){
-    stars.push({
-      r: random(min(width,height)*0.18, min(width,height)*0.45),
-      a: random(TWO_PI),
-      s: random(0.3,1.8),
-      sp: random(0.0008,0.003)
-    });
-  }
-  noCursor();
+  paperG = createGraphics(width, height);
+  drawPaper(paperG);
+  background(247, 244, 236);
+  image(paperG, 0, 0);
 }
 
-function windowResized(){
-  resizeCanvas(windowWidth,windowHeight);
-  pg=createGraphics(width,height);
-  drawGlowBackdrop();
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  paperG = createGraphics(width, height);
+  drawPaper(paperG);
+  background(247, 244, 236);
+  image(paperG, 0, 0);
 }
 
-function drawGlowBackdrop(){
-  pg.clear();
-  pg.noStroke();
-  pg.background(P.bg);
-  for(let i=0;i<5000;i++){
-    const x=random(width),y=random(height);
-    const a=random(12);
-    pg.fill(255,255,255,a);
-    pg.circle(x,y,random(0.3,1.1));
-  }
-  for(let r=0;r<160;r++){
-    const a=map(r,0,159,0,70);
-    pg.fill(230,193,74,a*0.16);
-    pg.circle(width/2,height/2, max(width,height)*1.3 - r*6);
-  }
+function draw() {
+  if (mouseIsPressed) penStroke();
 }
 
-function draw(){
-  background(P.bg);
-  image(pg,0,0);
-  translate(width/2,height/2);
+function penStroke() {
+  const p = createVector(mouseX, mouseY);
+  if (!last) last = p.copy();
 
-  const R=min(width,height)*0.38;
-  const now=new Date();
-  const hr=((now.getHours()%12)+now.getMinutes()/60)/12;
-  const mn=(now.getMinutes()+now.getSeconds()/60)/60;
-  const sc=(now.getSeconds()+now.getMilliseconds()/1000)/60;
+  const v = p5.Vector.sub(p, last);
+  const sp = constrain(v.mag(), 0, 40);
+  speedAvg = lerp(speedAvg, sp, 0.3);
 
-  push();
-  rotate(sin(frameCount*0.0012)*0.06);
-  ring(R*1.02, 6, 0.006, P.gold, 6);
-  ring(R*0.86, 9, -0.01, P.aqua, 5);
-  ring(R*0.70, 12, 0.015, P.gold, 4);
-  arcRunes(R*0.56, 32, 0.007, P.aqua);
-  arcRunes(R*0.44, 24, -0.011, P.gold);
-  lissajousSigil(R*0.52, 0.65, P.aqua);
-  lissajousSigil(R*0.35, 1.05, P.gold);
-  pop();
+  const pressure = map(speedAvg, 0, 40, 0.85, 0.25); // slower -> more pressure
+  const baseW = map(pressure, 0.25, 0.85, 0.7, 2.6);
+  const ink = map(pressure, 0.25, 0.85, 70, 180);
 
-  for(let s of stars){
-    s.a+=s.sp;
-    const x=cos(s.a)*s.r,y=sin(s.a)*s.r;
-    noStroke(); fill(255,235,180,140);
-    circle(x,y,s.s);
+  const nLayers = 5; // micro-hatching layers
+  for (let k = 0; k < nLayers; k++) {
+    const t = k / (nLayers - 1);
+    const w = baseW * (0.6 + 0.8 * (1 - abs(t - 0.5) * 2));
+    const jitter = 0.9 * (1 - pressure) + 0.2;
+    const off = p5.Vector.fromAngle(v.heading() + HALF_PI)
+      .setMag((t - 0.5) * w * 2.2 + (noise(frameCount * 0.02 + k) - 0.5) * w * jitter);
+
+    const a1 = createVector(last.x + off.x, last.y + off.y);
+    const a2 = createVector(p.x + off.x, p.y + off.y);
+
+    const dash = 6 + noise(k * 20 + frameCount * 0.02) * 8;
+    const len = p5.Vector.dist(a1, a2);
+    const dir = p5.Vector.sub(a2, a1).normalize();
+
+    let drawn = 0;
+    while (drawn < len) {
+      const seg = min(dash, len - drawn);
+      const s1 = p5.Vector.add(a1, p5.Vector.mult(dir, drawn));
+      const s2 = p5.Vector.add(a1, p5.Vector.mult(dir, drawn + seg));
+      const alpha = ink * random(0.7, 1.0);
+      stroke(20, alpha);
+      strokeWeight(1);
+      line(s1.x, s1.y, s2.x, s2.y);
+      drawn += seg + random(2, 5); // tiny gaps for pen texture
+    }
   }
 
-  hand(sc, R*0.92, 2.6, color(P.aqua));
-  hand(mn, R*0.75, 5, color(P.gold));
-  hand(hr, R*0.55, 7.5, color(P.gold));
-
-  centerGem();
-
-  timeBadge(now);
-
-  t+=0.006;
-}
-
-function ring(r, spokes, rotSpeed, col, weight){
-  push();
-  rotate(frameCount*rotSpeed);
-  noFill();
-  stroke(col); strokeWeight(weight);
-  circle(0,0,r*2);
-  strokeWeight(max(1,weight*0.5));
-  for(let i=0;i<spokes;i++){
-    const a=TWO_PI*(i/spokes);
-    const n=(noise(i*0.2+t)-0.5)*r*0.04;
-    const x1=cos(a)*(r*0.86+n), y1=sin(a)*(r*0.86+n);
-    const x2=cos(a)*(r*1.04+n), y2=sin(a)*(r*1.04+n);
-    line(x1,y1,x2,y2);
+  // micro scribble around the path for fiber look
+  for (let i = 0; i < 10; i++) {
+    const a = random(TWO_PI);
+    const r = random(baseW * 0.5, baseW * 2.2);
+    const px = p.x + cos(a) * r, py = p.y + sin(a) * r;
+    const len = random(1, 6);
+    const ang = a + random(-0.7, 0.7);
+    stroke(20, random(40, 120));
+    strokeWeight(0.6);
+    line(px, py, px + cos(ang) * len, py + sin(ang) * len);
   }
-  pop();
-}
 
-function arcRunes(r, count, rotSpeed, col){
-  push();
-  rotate(frameCount*rotSpeed);
-  noFill();
-  stroke(col); strokeWeight(2);
-  const dash=PI*1.3/count;
-  for(let i=0;i<count;i++){
-    const a=i*TWO_PI/count;
-    arc(0,0,r*2, r*2, a+0.1, a+0.1+dash);
-    push();
-    const rr=r*0.92;
-    const x=cos(a+dash*0.5)*rr, y=sin(a+dash*0.5)*rr;
-    translate(x,y);
-    rotate(a*3.0);
-    glyph(col, r*0.06);
-    pop();
+  // occasional ink dot when moving slowly
+  if (random() < 0.1 && speedAvg < 6) {
+    noStroke();
+    fill(20, random(40, 120));
+    const r = random(0.6, 2.4) * map(pressure, 0.25, 0.85, 0.8, 1.8);
+    circle(p.x + random(-1, 1), p.y + random(-1, 1), r);
   }
-  pop();
+
+  last = p.copy();
 }
 
-function glyph(col, sz){
-  stroke(col); strokeWeight(2); noFill();
-  const k=sz;
-  line(-k,0,k,0);
-  line(0,-k*0.9,0,k*0.9);
-  push(); rotate(PI/4); rectMode(CENTER); rect(0,0,k*0.9,k*0.22,2); pop();
-  circle(0,0,k*0.55);
+function mouseReleased() {
+  last = null;
+  speedAvg = 0;
 }
 
-function lissajousSigil(r, speed, col){
-  noFill();
-  stroke(col); strokeWeight(1.8);
-  beginShape();
-  const n=260;
-  for(let i=0;i<=n;i++){
-    const u=i/n;
-    const a=TWO_PI*u;
-    const x=r*0.9*sin(3*a + frameCount*0.002*speed);
-    const y=r*0.9*sin(4*a + frameCount*0.003*speed + PI/6);
-    vertex(x,y);
+function keyPressed() {
+  if (key === 'C' || key === 'c') {
+    background(247, 244, 236);
+    image(paperG, 0, 0);
   }
-  endShape();
+  if (key === 'S' || key === 's') saveCanvas('pen_drawn', 'png');
 }
 
-function hand(norm,len,w,col){
-  const a=-HALF_PI + TWO_PI*norm;
-  push();
-  rotate(a);
-  const g=color(red(col),green(col),blue(col),70);
-  noStroke(); fill(g);
-  for(let i=0;i<12;i++){
-    const rr=map(i,0,11,0,len);
-    circle(0,-rr,map(i,0,11,w*0.4,1));
+function drawPaper(g) {
+  g.background(247, 244, 236);
+  g.noStroke();
+  for (let i = 0; i < width * height * 0.015; i++) {
+    const x = random(width), y = random(height);
+    const a = random(6, 16);
+    g.fill(0, 0, 0, a);
+    g.circle(x, y, random(0.4, 1.2));
   }
-  stroke(col); strokeWeight(w);
-  line(0,0,0,-len);
-  glowDot(0,-len,col,w*1.2);
-  pop();
-}
-
-function glowDot(x,y,col,sz){
-  push();
-  translate(x,y);
-  noStroke();
-  for(let i=10;i>=1;i--){
-    const a=map(i,1,10,220,10);
-    fill(red(col),green(col),blue(col),a);
-    circle(0,0, map(i,1,10,sz*2.6,sz*0.6));
+  g.noFill();
+  for (let r = 0; r < 120; r++) {
+    g.stroke(0, 0, 0, map(r, 0, 119, 2, 12));
+    g.rect(8 + r * 0.5, 8 + r * 0.5, width - 16 - r, height - 16 - r, 10);
   }
-  fill(255,240,200,230); circle(0,0,sz*0.5);
-  pop();
-}
-
-function centerGem(){
-  push();
-  noStroke();
-  for(let i=12;i>=1;i--){
-    const a=map(i,1,12,220,20);
-    fill(230,193,74,a);
-    circle(0,0,map(i,1,12,36,10));
-  }
-  stroke(P.aqua); noFill(); strokeWeight(2);
-  rotate(frameCount*0.01);
-  polygon(0,0,16,6);
-  rotate(-frameCount*0.02);
-  polygon(0,0,11,5);
-  pop();
-}
-
-function polygon(x,y,r,n){
-  beginShape();
-  for(let i=0;i<n;i++){
-    const a=TWO_PI*i/n;
-    vertex(x+cos(a)*r,y+sin(a)*r);
-  }
-  endShape(CLOSE);
-}
-
-function timeBadge(now){
-  const pad=n=>(n<10?"0":"")+n;
-  const ts=`${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-  const ds=`${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()}`;
-  push();
-  translate(0,height*0.38);
-  textAlign(CENTER,CENTER);
-  noStroke();
-  fill(0,0,0,120); rectMode(CENTER);
-  rect(0,0, textWidth(ts)+90, 58, 10);
-  fill(P.gold); textSize(30); text(ts,0,-2);
-  fill(P.aqua); textSize(14); text(ds,0,18);
-  pop();
 }
