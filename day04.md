@@ -12,7 +12,7 @@ Using p5.js, I experimented with arcs arranged in a grid to recreate that sense 
 {% endraw %}
 
 {% raw %}
-<iframe src="content/day01/04/embed.html" width="100%" height="450" frameborder="no"></iframe>
+<iframe src="content/day01/0401/embed.html" width="100%" height="450" frameborder="no"></iframe>
 {% endraw %}
 
 ```js
