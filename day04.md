@@ -95,32 +95,25 @@ function keyPressed() {
 ![Example Image](./content/day01/04/week401.jpg)
 {% endraw %}
 
-
+{% raw %}
+<iframe src="content/day01/0402/embed.html" width="100%" height="450" frameborder="no"></iframe>
+{% endraw %}
 
 
 # Week 4
 
 ## Exploration & Experimentation
-For this week’s project, I explored how time can be expressed visually without using traditional numbers or letters. I designed an abstract clock that constantly evolves—its appearance shifts smoothly throughout the day, making every moment look unique.
-Inspired by circular motion and rhythmic cycles, I experimented with rotating geometric shapes and color transitions that correspond to different temporal rhythms. Instead of showing time as hours and minutes, my design represents cycles: the rhythm of seconds through small continuous motion, the rhythm of minutes through color changes, and the rhythm of hours through larger transformations in form and scale.
-Through this exploration, I learned to think of time as movement, repetition, and change—something that can be felt rather than read.
+FFor this week’s project, I explored how time and energy could be visualized as motion and light rather than as numeric information. I created two complementary visual systems: one based on dark, hand-drawn, ink-like strokes expanding from a circular void, and another inspired by Doctor Strange’s portal, a rotating ring of glowing energy lines that constantly shift and breathe. The first experiment expresses time as accumulation: every drawn stroke represents a passing moment that slowly builds density around an empty center. The second experiment treats time as flow, with luminous particles and rotating arcs that continuously circulate, fade, and re-emerge. Together, both systems capture time as transformation, something fluid, cyclic, and alive.
 
 ## Influences & References
-The main inspiration came from discussions about cyclical vs. linear time, biological rhythms, and celestial motion. I was intrigued by how natural systems—like day and night, moon phases, or breathing patterns—visualize time in repeating cycles.
-Artistically, I was influenced by kinetic art and generative animation, where subtle continuous change creates a meditative experience. The concept of subjective time also influenced my approach: how humans perceive moments differently depending on emotion or attention.
-By merging these ideas, I aimed to create a digital object that behaves almost like a living organism—breathing, expanding, and contracting as time flows.
+Visually, the project was influenced by the mechanical precision of drawing machines and the cinematic aesthetics of Doctor Strange’s magical portals. The white-on-black drawings recall the physical traces of ink and charcoal, while the glowing orange portal reflects kinetic light installations and the idea of energy made visible. Conceptually, I was inspired by cyclical time and the idea of portals as thresholds between moments. Both drawings emphasize repetition, rhythm, and constant change, connecting natural cycles, motion, and perception.
+
 
 ![Example Image](content\day01\03\week03image.png)
 
 ## Algorithmic Thinking
-The clock is built using clear algorithmic structures to represent multiple time cycles.
-	•	Rotation and oscillation are mapped to the current second and minute, producing continuous motion.
-	•	Color transitions are controlled by the hour, shifting gradually to mark different times of day.
-	•	To make the visual never repeat exactly, I incorporated randomness and smooth interpolation using Perlin noise, ensuring each moment looks slightly different.
-This system transforms abstract time units into dynamic visual behavior—an algorithmic ecosystem of motion, rhythm, and color.
+Both visual systems were built through generative algorithms in p5.js. The white-on-black “charcoal clock” uses random vector directions and Perlin noise to generate hundreds of small strokes orbiting around an invisible core. Each stroke fades slightly, creating an evolving density pattern that never repeats exactly. The portal version relies on trigonometric motion, layered transparency, and additive color blending. Particles rotate along circular paths with slight phase offsets, producing glowing segments and sparks that simulate rotating energy. In both, time is mapped to motion speed and rotational phase, thus even without digits, the system behaves like a temporal organism that breathes, rotates, and regenerates over time.
+
 
 ## Critical Reflection
-This week taught me that time can be visualized beyond numbers—it can be experienced through transformation, rhythm, and emotion.
-Designing a clock without digits was challenging because it forced me to communicate time symbolically, through motion and atmosphere. Yet, that limitation opened creative possibilities: the clock became more poetic and expressive.
-I also learned that balance between predictability (cyclical order) and variation (random change) is crucial for maintaining interest. Too much structure feels mechanical, but too much chaos loses meaning.
-Ultimately, this project helped me appreciate how code can capture the fluid, organic nature of time—turning an abstract concept into something visual, living, and immersive.
+This project showed me that time can be communicated not only through structure but also through sensation. By shifting from measurable units to visual energy, I transformed the concept of a clock into a living, responsive environment. The contrast between the two experiments, the quiet, hand-drawn void and the intense, luminous portal, revealed how the same concept can evoke very different emotions depending on form and medium. Working with randomness and light decay taught me to find balance between control and unpredictability, enough order to remain readable yet enough chaos to feel organic. Ultimately, these drawings visualize time as motion, rhythm, and transformation, an endless cycle of creation and dissolution rather than a sequence of numbers.
