@@ -8,7 +8,7 @@ Using p5.js, I experimented with arcs arranged in a grid to recreate that sense 
 
 ### IMAGE01
 {% raw %}
-![Faces Reference](./content/day01/05/faces_reference.jpg)
+![Faces Reference](./content/day01/05/faces_references.png)
 {% endraw %}
 
 {% raw %}
