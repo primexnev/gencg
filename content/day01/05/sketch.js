@@ -6,13 +6,17 @@ const buttonX = 20, buttonY = 20, buttonW = 200, buttonH = 40;
 let hover = false;
 
 function setup() {
-  createCanvas(900, 600);
+  createCanvas(windowWidth, windowHeight);
   stroke(0); strokeWeight(2);
   textFont('sans-serif'); textSize(16);
   noFill(); noLoop();
   generateFaces();
 }
 
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  redraw();
+}
 function generateFaces() {
   faces = [];
   for (let i = 0; i < NUM_FACES; i++) faces.push(makeRandomFace());
