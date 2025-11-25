@@ -11,7 +11,7 @@ In this project, I treated pixels as raw material. I loaded an image, read its p
 {% endraw %}
 
 {% raw %}
-<iframe src="content/day01/06/embed.html?v=1" width="100%" height="450" frameborder="no"></iframe>
+<iframe src="content/day01/06/embed.html?v=2" width="100%" height="450" frameborder="no"></iframe>
 {% endraw %}
 
 ```js

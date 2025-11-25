@@ -1,129 +1,76 @@
-// Parametric Face Generator (simplified)
-let faces = [];
-const NUM_FACES = 12;
+let pixelSize = 12;
 
-const buttonX = 20, buttonY = 20, buttonW = 200, buttonH = 40;
-let hover = false;
+// Pixels-as-material: remake an image with sampled dots (and optional polar remap)
+let img;
+let step = 6;        // sampling stride in pixels
+let usePolar = false;
+let jitter = 0.0;    // slight random offset
+
+function preload() {
+  img = loadImage('sunset.png');
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  stroke(0); strokeWeight(2);
-  textFont('sans-serif'); textSize(16);
-  noFill(); noLoop();
-  generateFaces();
+  noLoop();
+  pixelDensity(1);
+  noStroke();
+}
+
+function draw() {
+  background(10);
+
+  // Compute how the image maps to canvas, preserving aspect
+  const imgRatio = img.width / img.height;
+  let drawW = width;
+  let drawH = width / imgRatio;
+  if (drawH > height) {
+    drawH = height;
+    drawW = height * imgRatio;
+  }
+  const offX = (width - drawW) * 0.5;
+  const offY = (height - drawH) * 0.5;
+
+  img.loadPixels();
+  colorMode(HSB, 360, 100, 100, 100);
+  for (let y = 0; y < drawH; y += step) {
+    for (let x = 0; x < drawW; x += step) {
+      // sample source image coordinates
+      const sx = floor(map(x, 0, drawW, 0, img.width - 1));
+      const sy = floor(map(y, 0, drawH, 0, img.height - 1));
+      const c = img.get(sx, sy);
+      const b = brightness(c); // 0..100
+
+      // size by brightness, color from pixel
+      const sz = map(b, 0, 100, 1.5, step * 1.1);
+      fill(hue(c), saturation(c), b, 100);
+
+      // optional polar remap to "unglue" the grid
+      let dx = offX + x + random(-jitter, jitter);
+      let dy = offY + y + random(-jitter, jitter);
+      if (usePolar) {
+        const u = x / drawW;         // 0..1 across width
+        const v = y / drawH;         // 0..1 down height
+        const ang = u * TWO_PI;
+        const rad = v * min(drawW, drawH) * 0.48;
+        dx = width * 0.5 + cos(ang) * rad + random(-jitter, jitter);
+        dy = height * 0.5 + sin(ang) * rad + random(-jitter, jitter);
+      }
+      ellipse(dx, dy, sz, sz);
+    }
+  }
+  colorMode(RGB, 255);
+}
+
+function keyPressed() {
+  if (key === ' ') { usePolar = !usePolar; redraw(); }
+  if (key === 'S' || key === 's') saveCanvas('pixels_as_material', 'png');
+  if (key === '1') { step = 4; redraw(); }
+  if (key === '2') { step = 8; redraw(); }
+  if (key === '3') { step = 12; redraw(); }
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   redraw();
-}
-function generateFaces() {
-  faces = [];
-  for (let i = 0; i < NUM_FACES; i++) faces.push(makeRandomFace());
-}
-
-function draw() {
-  background(255);
-  drawButton();
-
-  const cols = 4, rows = 3, cellW = width / cols;
-  const cellH = (height - 80) / rows, offsetY = 80;
-  for (let i = 0; i < faces.length; i++) {
-    const col = i % cols, row = floor(i / cols);
-    const x = cellW * col + cellW / 2;
-    const y = offsetY + cellH * row + cellH / 2;
-    drawFace(x, y, faces[i]);
-  }
-}
-
-function drawButton() {
-  fill(hover ? 230 : 245); stroke(0);
-  rect(buttonX, buttonY, buttonW, buttonH, 8);
-  fill(0); noStroke(); textAlign(CENTER, CENTER);
-  text("Generate New Faces", buttonX + buttonW / 2, buttonY + buttonH / 2);
-  noFill(); stroke(0);
-}
-
-function mouseMoved() {
-  hover = mouseX > buttonX && mouseX < buttonX + buttonW && mouseY > buttonY && mouseY < buttonY + buttonH;
-  redraw();
-}
-
-function mousePressed() {
-  if (hover) { generateFaces(); redraw(); }
-}
-
-function makeRandomFace() {
-  const p = {
-    headWidth: random(120, 200),
-    headHeight: random(140, 220),
-    eyeSize: random(10, 30),
-    eyeSpacing: random(30, 80),
-    eyeOffsetY: random(-20, 10),
-    mouthWidth: random(40, 100),
-    mouthCurvature: random(-25, 25),
-    browTilt: random(-15, 15),
-    numEyes: random([1, 2, 3]),
-    hasBlush: random() < 0.5,
-    hasHair: random() < 0.5,
-    eyeShape: random(["round", "oval"])
-  };
-  p.mood = map(p.mouthCurvature, -25, 25, -1, 1);
-  return p;
-}
-
-function drawFace(cx, cy, p) {
-  push(); translate(cx, cy); noFill(); stroke(0);
-
-  beginShape();
-  curveVertex(-p.headWidth/2, -p.headHeight/2);
-  curveVertex(-p.headWidth/2, -p.headHeight/2);
-  curveVertex(0, -p.headHeight/2 - 10);
-  curveVertex(p.headWidth/2, -p.headHeight/2);
-  curveVertex(p.headWidth/2 + 10, p.headHeight/4);
-  curveVertex(0, p.headHeight/2 + 10);
-  curveVertex(-p.headWidth/2 - 10, p.headHeight/4);
-  curveVertex(-p.headWidth/2, -p.headHeight/2);
-  curveVertex(-p.headWidth/2, -p.headHeight/2);
-  endShape();
-
-  line(-p.headWidth/2, 0, -p.headWidth/2 - 20, 0);
-  line(p.headWidth/2, 0, p.headWidth/2 + 20, 0);
-
-  if (p.hasHair) for (let x = -20; x <= 20; x += 10) line(x, -p.headHeight/2 - 5, x, -p.headHeight/2 - random(15, 25));
-
-  const y0 = p.eyeOffsetY;
-  if (p.numEyes === 1) drawEye(0, y0, p);
-  if (p.numEyes === 2) { drawEye(-p.eyeSpacing/2, y0, p); drawEye(p.eyeSpacing/2, y0, p); }
-  if (p.numEyes === 3) { drawEye(-p.eyeSpacing/1.5, y0, p); drawEye(0, y0 + 5, p); drawEye(p.eyeSpacing/1.5, y0, p); }
-
-  const browY = y0 - 25, tilt = p.browTilt + p.mood * 10;
-  if (p.numEyes >= 2) {
-    line(-p.eyeSpacing/2 - 10, browY - tilt, -p.eyeSpacing/2 + 10, browY + tilt);
-    line(p.eyeSpacing/2 - 10, browY + tilt, p.eyeSpacing/2 + 10, browY - tilt);
-  } else {
-    line(-20, browY + tilt, 20, browY - tilt);
-  }
-
-  const noseLen = map(p.mood, -1, 1, 35, 15);
-  line(0, y0, 0, y0 + noseLen);
-
-  const mouthY = y0 + 50, w = p.mouthWidth, c = p.mouthCurvature;
-  beginShape(); vertex(-w/2, mouthY); quadraticVertex(0, mouthY + c, w/2, mouthY); endShape();
-
-  if (p.hasBlush) {
-    noStroke(); fill(255, 150, 180, 120);
-    ellipse(-p.eyeSpacing/2, y0 + 30, 18, 12);
-    ellipse(p.eyeSpacing/2, y0 + 30, 18, 12);
-    noFill(); stroke(0);
-  }
-  pop();
-}
-
-function drawEye(x, y, p) {
-  push(); translate(x, y);
-  if (p.eyeShape === "round") ellipse(0, 0, p.eyeSize, p.eyeSize);
-  else ellipse(0, 0, p.eyeSize*1.4, p.eyeSize*0.8);
-  fill(0); ellipse(0, 0, p.eyeSize/3, p.eyeSize/3); noFill();
-  pop();
 }
