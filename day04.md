@@ -3,8 +3,7 @@
 ## Nevzat's GENCG Portfolio
 
 
-In this project, I created a colorful geometric pattern inspired by the visual examples we explored during the class. My main reference, however, came from the Doctor Strange scene where space bends and circular portals open in mid-air. The composition of glowing rings, floating rocks, and intersecting energy lines influenced the circular rhythm of my design.
-Using p5.js, I experimented with arcs arranged in a grid to recreate that sense of movement and dimensional distortion. I combined bright, contrasting colors to evoke the magical and cosmic feeling of the scene, turning simple shapes into an illusion of depth and flow. This project helped me understand how repetition, symmetry, and color harmony can convey motion and energy within a static digital composition.
+In this project, I explored the idea of a drawing machine by creating a simple system that draws based on rules instead of direct control. I experimented with small movements, random changes, and adjustable parameters, and the machine produced different results each time. Even small variations in position or direction created new and unexpected shapes. Through this process, I learned that a drawing doesn’t always need to be made by hand—sometimes setting the rules and letting the system create on its own can lead to interesting and expressive outcomes.
 
 ### IMAGE01
 {% raw %}

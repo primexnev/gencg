@@ -3,8 +3,8 @@
 ## Nevzat's GENCG Portfolio
 
 
-In this project, I created a colorful geometric pattern inspired by the visual examples we explored during the class. My main reference, however, came from the Doctor Strange scene where space bends and circular portals open in mid-air. The composition of glowing rings, floating rocks, and intersecting energy lines influenced the circular rhythm of my design.
-Using p5.js, I experimented with arcs arranged in a grid to recreate that sense of movement and dimensional distortion. I combined bright, contrasting colors to evoke the magical and cosmic feeling of the scene, turning simple shapes into an illusion of depth and flow. This project helped me understand how repetition, symmetry, and color harmony can convey motion and energy within a static digital composition.
+In this project, I learned how to encode and draw multiple facial expressions. I first built a single face, then expanded it into a simple random generator that mixes several design variants to create many different faces.
+
 
 ### IMAGE01
 {% raw %}
@@ -16,105 +16,149 @@ Using p5.js, I experimented with arcs arranged in a grid to recreate that sense 
 {% endraw %}
 
 ```js
-// FAST DIGITAL HARMONOGRAPH — Drawing Machine
-// Inspired by mechanical drawing arms and spirographs
-// Press SPACE for a new pattern, S to save
+// Parametric Face Generator (simplified)
+let faces = [];
+const NUM_FACES = 12;
 
-let t = 0;
-let arms = [];
-let numArms = 3;
-let trail = [];
+const buttonX = 20, buttonY = 20, buttonW = 200, buttonH = 40;
+let hover = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  resetMachine();
-  frameRate(120); // 🚀 faster drawing
+  stroke(0); strokeWeight(2);
+  textFont('sans-serif'); textSize(16);
+  noFill(); noLoop();
+  generateFaces();
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  redraw();
+}
+function generateFaces() {
+  faces = [];
+  for (let i = 0; i < NUM_FACES; i++) faces.push(makeRandomFace());
 }
 
 function draw() {
-  // fade background slightly for trailing effect
-  background(245, 245, 240, 30);
+  background(255);
+  drawButton();
 
-  translate(width / 2, height / 2);
-  stroke(20, 20, 20, 150);
-  strokeWeight(1.8);
-  noFill();
-
-  let x = 0;
-  let y = 0;
-
-  // combine sinusoidal arms
-  for (let i = 0; i < arms.length; i++) {
-    let a = arms[i];
-    x += sin(t * a.speed + a.phase) * a.length;
-    y += cos(t * a.speed * a.dir + a.phase) * a.length;
+  const cols = 4, rows = 3, cellW = width / cols;
+  const cellH = (height - 80) / rows, offsetY = 80;
+  for (let i = 0; i < faces.length; i++) {
+    const col = i % cols, row = floor(i / cols);
+    const x = cellW * col + cellW / 2;
+    const y = offsetY + cellH * row + cellH / 2;
+    drawFace(x, y, faces[i]);
   }
+}
 
-  // store trail (shorter for faster clearing)
-  trail.push(createVector(x, y));
-  if (trail.length > 1000) trail.shift();
+function drawButton() {
+  fill(hover ? 230 : 245); stroke(0);
+  rect(buttonX, buttonY, buttonW, buttonH, 8);
+  fill(0); noStroke(); textAlign(CENTER, CENTER);
+  text("Generate New Faces", buttonX + buttonW / 2, buttonY + buttonH / 2);
+  noFill(); stroke(0);
+}
 
-  // draw the trail line
+function mouseMoved() {
+  hover = mouseX > buttonX && mouseX < buttonX + buttonW && mouseY > buttonY && mouseY < buttonY + buttonH;
+  redraw();
+}
+
+function mousePressed() {
+  if (hover) { generateFaces(); redraw(); }
+}
+
+function makeRandomFace() {
+  const p = {
+    headWidth: random(120, 200),
+    headHeight: random(140, 220),
+    eyeSize: random(10, 30),
+    eyeSpacing: random(30, 80),
+    eyeOffsetY: random(-20, 10),
+    mouthWidth: random(40, 100),
+    mouthCurvature: random(-25, 25),
+    browTilt: random(-15, 15),
+    numEyes: random([1, 2, 3]),
+    hasBlush: random() < 0.5,
+    hasHair: random() < 0.5,
+    eyeShape: random(["round", "oval"])
+  };
+  p.mood = map(p.mouthCurvature, -25, 25, -1, 1);
+  return p;
+}
+
+function drawFace(cx, cy, p) {
+  push(); translate(cx, cy); noFill(); stroke(0);
+
   beginShape();
-  for (let v of trail) vertex(v.x, v.y);
+  curveVertex(-p.headWidth/2, -p.headHeight/2);
+  curveVertex(-p.headWidth/2, -p.headHeight/2);
+  curveVertex(0, -p.headHeight/2 - 10);
+  curveVertex(p.headWidth/2, -p.headHeight/2);
+  curveVertex(p.headWidth/2 + 10, p.headHeight/4);
+  curveVertex(0, p.headHeight/2 + 10);
+  curveVertex(-p.headWidth/2 - 10, p.headHeight/4);
+  curveVertex(-p.headWidth/2, -p.headHeight/2);
+  curveVertex(-p.headWidth/2, -p.headHeight/2);
   endShape();
 
-  // draw the pen tip
-  fill(0);
-  noStroke();
-  circle(x, y, 6);
+  line(-p.headWidth/2, 0, -p.headWidth/2 - 20, 0);
+  line(p.headWidth/2, 0, p.headWidth/2 + 20, 0);
 
-  // ⏩ increase time faster
-  t += 0.04;
-}
+  if (p.hasHair) for (let x = -20; x <= 20; x += 10) line(x, -p.headHeight/2 - 5, x, -p.headHeight/2 - random(15, 25));
 
-function resetMachine() {
-  background(245, 245, 240);
-  arms = [];
-  trail = [];
-  for (let i = 0; i < numArms; i++) {
-    arms.push({
-      length: random(60, 200),
-      speed: random(1.0, 3.5), // faster oscillation
-      phase: random(TWO_PI),
-      dir: random([1, -1])
-    });
+  const y0 = p.eyeOffsetY;
+  if (p.numEyes === 1) drawEye(0, y0, p);
+  if (p.numEyes === 2) { drawEye(-p.eyeSpacing/2, y0, p); drawEye(p.eyeSpacing/2, y0, p); }
+  if (p.numEyes === 3) { drawEye(-p.eyeSpacing/1.5, y0, p); drawEye(0, y0 + 5, p); drawEye(p.eyeSpacing/1.5, y0, p); }
+
+  const browY = y0 - 25, tilt = p.browTilt + p.mood * 10;
+  if (p.numEyes >= 2) {
+    line(-p.eyeSpacing/2 - 10, browY - tilt, -p.eyeSpacing/2 + 10, browY + tilt);
+    line(p.eyeSpacing/2 - 10, browY + tilt, p.eyeSpacing/2 + 10, browY - tilt);
+  } else {
+    line(-20, browY + tilt, 20, browY - tilt);
   }
-  t = 0;
+
+  const noseLen = map(p.mood, -1, 1, 35, 15);
+  line(0, y0, 0, y0 + noseLen);
+
+  const mouthY = y0 + 50, w = p.mouthWidth, c = p.mouthCurvature;
+  beginShape(); vertex(-w/2, mouthY); quadraticVertex(0, mouthY + c, w/2, mouthY); endShape();
+
+  if (p.hasBlush) {
+    noStroke(); fill(255, 150, 180, 120);
+    ellipse(-p.eyeSpacing/2, y0 + 30, 18, 12);
+    ellipse(p.eyeSpacing/2, y0 + 30, 18, 12);
+    noFill(); stroke(0);
+  }
+  pop();
 }
 
-function keyPressed() {
-  if (key === ' ') resetMachine();
-  if (key === 'S' || key === 's') saveCanvas('drawing_machine', 'png');
+function drawEye(x, y, p) {
+  push(); translate(x, y);
+  if (p.eyeShape === "round") ellipse(0, 0, p.eyeSize, p.eyeSize);
+  else ellipse(0, 0, p.eyeSize*1.4, p.eyeSize*0.8);
+  fill(0); ellipse(0, 0, p.eyeSize/3, p.eyeSize/3); noFill();
+  pop();
 }
 
 ```
 
-### IMAGE02
-{% raw %}
-![Example Image](./content/day01/04/week401.jpg)
-{% endraw %}
-
-{% raw %}
-<iframe src="content/day01/04.02/embed.html?v=2" width="100%" height="450" frameborder="no"></iframe>
-{% endraw %}
-
-
-# Week 4
+# Week 5
 
 ## Exploration & Experimentation
-FFor this week’s project, I explored how time and energy could be visualized as motion and light rather than as numeric information. I created two complementary visual systems: one based on dark, hand-drawn, ink-like strokes expanding from a circular void, and another inspired by Doctor Strange’s portal, a rotating ring of glowing energy lines that constantly shift and breathe. The first experiment expresses time as accumulation: every drawn stroke represents a passing moment that slowly builds density around an empty center. The second experiment treats time as flow, with luminous particles and rotating arcs that continuously circulate, fade, and re-emerge. Together, both systems capture time as transformation, something fluid, cyclic, and alive.
+At first, it took me a while to figure out how to draw the faces. After a few experiments—and with some help from ChatGPT—the process became clearer. I began by sketching the designs on paper and then translated them into code. I built a single face template and layered multiple expressions on top of it, turning it into a small random generator. It was both enjoyable and surprisingly challenging.
 
 ## Influences & References
-Visually, the project was influenced by the mechanical precision of drawing machines and the cinematic aesthetics of Doctor Strange’s magical portals. The white-on-black drawings recall the physical traces of ink and charcoal, while the glowing orange portal reflects kinetic light installations and the idea of energy made visible. Conceptually, I was inspired by cyclical time and the idea of portals as thresholds between moments. Both drawings emphasize repetition, rhythm, and constant change, connecting natural cycles, motion, and perception.
-
-
-![Example Image](content\day01\03\week03image.png)
+As references, I used the visuals from Lesson 6. Those examples helped me understand how to structure the facial features and guided the overall look of the generator, especially in balancing variation across expressions while keeping a simple, readable style.
 
 ## Algorithmic Thinking
-Both visual systems were built through generative algorithms in p5.js. The white-on-black “charcoal clock” uses random vector directions and Perlin noise to generate hundreds of small strokes orbiting around an invisible core. Each stroke fades slightly, creating an evolving density pattern that never repeats exactly. The portal version relies on trigonometric motion, layered transparency, and additive color blending. Particles rotate along circular paths with slight phase offsets, producing glowing segments and sparks that simulate rotating energy. In both, time is mapped to motion speed and rotational phase, thus even without digits, the system behaves like a temporal organism that breathes, rotates, and regenerates over time.
-
+I treat each face as a set of parameters instead of a fixed drawing. Sizes and positions (head, eyes, mouth, brows) are picked randomly within safe ranges, and a few switches control style (eye count/shape, hair, blush). A single “mood” value comes from mouth curvature and also tilts the eyebrows and changes nose length, so features move together. The 4×3 grid comes from the canvas size, and the button simply regenerates new parameters. With these simple rules, the code stays readable but produces many different faces.
 
 ## Critical Reflection
-This project showed me that time can be communicated not only through structure but also through sensation. By shifting from measurable units to visual energy, I transformed the concept of a clock into a living, responsive environment. The contrast between the two experiments, the quiet, hand-drawn void and the intense, luminous portal, revealed how the same concept can evoke very different emotions depending on form and medium. Working with randomness and light decay taught me to find balance between control and unpredictability, enough order to remain readable yet enough chaos to feel organic. Ultimately, these drawings visualize time as motion, rhythm, and transformation, an endless cycle of creation and dissolution rather than a sequence of numbers.
+Designing faces with parameters taught me to balance randomness and control. Keeping ranges small and sharing a “mood” value across features made expressions feel consistent but still varied. The hardest part was deciding what to randomize versus keep fixed. Next, I’d add saved seeds and simple color palettes to curate results even better.
 

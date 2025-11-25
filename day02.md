@@ -103,29 +103,3 @@ I learned that even small changes in spacing or color can completely change how 
 It was challenging to make the grids align perfectly, but achieving that precision made the results look clean and satisfying.
 Adding interaction to the hexagon grid made the work feel more alive, while the rainbow arcs allowed me to explore emotion and contrast through color.
 Overall, these projects taught me how structure and creativity can work together to produce expressive, visually balanced generative artworks.
-
-### Webcam tests
-
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-
-
-
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-
-{% raw %}
-<iframe src="content/day01/02/embed.html" width="100%" height="450" frameborder="no"></iframe>
-{% endraw %}
-
-## Computing with computer
-
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-
-> At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-
-{% raw %}
-<iframe src="content/day01/03/embed.html" width="100%" height="450" frameborder="no"></iframe>
-{% endraw %}
-
-* Lorem ipsum dolor sit amet
-* Consetetur sadipscing elitr, sed diam nonumy.
-* At vero eos et accusam et justo duo dolores et ea rebum. 
