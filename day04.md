@@ -99,7 +99,7 @@ function keyPressed() {
 {% endraw %}
 
 {% raw %}
-<iframe src="content/day01/0403/embed.html" width="100%" height="450" frameborder="no"></iframe>
+<iframe src="content/day01/0403/embed.html?v=1" width="100%" height="450" frameborder="no"></iframe>
 {% endraw %}
 
 
