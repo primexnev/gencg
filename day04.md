@@ -14,6 +14,10 @@ In this project, I explored the idea of a drawing machine by creating a simple s
 <iframe src="content/day01/0401/embed.html" width="100%" height="450" frameborder="no"></iframe>
 {% endraw %}
 
+{% raw %}
+<iframe src="content/day01/04.02/embed.html?v=2" width="100%" height="450" frameborder="no"></iframe>
+{% endraw %}
+
 ```js
 // FAST DIGITAL HARMONOGRAPH — Drawing Machine
 // Inspired by mechanical drawing arms and spirographs
@@ -95,8 +99,9 @@ function keyPressed() {
 {% endraw %}
 
 {% raw %}
-<iframe src="content/day01/04.02/embed.html?v=2" width="100%" height="450" frameborder="no"></iframe>
+<iframe src="content/day01/0403/embed.html" width="100%" height="450" frameborder="no"></iframe>
 {% endraw %}
+
 
 
 # Week 4
