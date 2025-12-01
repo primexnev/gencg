@@ -4,15 +4,38 @@
 
 ### Final Project
 
-In my final project I made a moving pixel sunset image. It was a hard and funny challenge for me.
+In my final project I made a moving pixel sunset image. It was a hard and funny challenge for me. I have 3 iterations which shows my progress in this project perfectly.
 
+
+### Iteration I: I tried to build my environment with a blend of blue, purple, and pink. I didn’t get the result I hoped for, so I moved on to the sea, waves, and beach. It still wasn’t working as I imagined, but I learned a lot from the attempt.
+
+{% raw %}
+<iframe src="content/day01/Project01/embed.html?v=1" width="100%" height="450" frameborder="no"></iframe>
+{% endraw %}
+
+
+
+
+### Iteration II: Before the second iteration, I did some research and looked at example code on the p5.js website. Then I rebuilt the scene, since the first version wasn’t what I wanted. I used two simple colors—a yellow/orange mix and blue—for the sky, and created the sea with different blues. As a final touch I added a large sun in the middle and clouds. This felt like real progress.
+
+{% raw %}
+<iframe src="content/day01/Project02/embed.html?v=1" width="100%" height="450" frameborder="no"></iframe>
+{% endraw %}
+
+
+
+
+### Iteration III: The scene still felt a bit empty—just sea, sky, and sun so I added a beach and dolphins that swim and jump. I also gave the sea some random motion and added moving clouds to make the pixel scene feel more alive. Now the sunset with swimming dolphins feels much richer.
 ### IMAGE01
+
+
+
 {% raw %}
 ![Example Image](./content/day01/week04.jpg)
 {% endraw %}
 
 {% raw %}
-<iframe src="content/day01/0401/embed.html" width="100%" height="450" frameborder="no"></iframe>
+<iframe src="content/day01/Project03/embed.html?v=1" width="100%" height="450" frameborder="no"></iframe>
 {% endraw %}
 
 ```js
