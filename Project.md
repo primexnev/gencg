@@ -10,7 +10,7 @@ In my final project I made a moving pixel sunset image. It was a hard and funny 
 ### Iteration I: I tried to build my environment with a blend of blue, purple, and pink. I didn’t get the result I hoped for, so I moved on to the sea, waves, and beach. It still wasn’t working as I imagined, but I learned a lot from the attempt.
 
 {% raw %}
-<iframe src="content/day01/Project01/embed.html?v=1" width="100%" height="450" frameborder="no"></iframe>
+<iframe src="content/day01/Project01/embed.html?v=2" width="100%" height="450" frameborder="no"></iframe>
 {% endraw %}
 
 
@@ -19,7 +19,7 @@ In my final project I made a moving pixel sunset image. It was a hard and funny 
 ### Iteration II: Before the second iteration, I did some research and looked at example code on the p5.js website. Then I rebuilt the scene, since the first version wasn’t what I wanted. I used two simple colors—a yellow/orange mix and blue—for the sky, and created the sea with different blues. As a final touch I added a large sun in the middle and clouds. This felt like real progress.
 
 {% raw %}
-<iframe src="content/day01/Project02/embed.html?v=1" width="100%" height="450" frameborder="no"></iframe>
+<iframe src="content/day01/Project02/embed.html?v=2" width="100%" height="450" frameborder="no"></iframe>
 {% endraw %}
 
 
@@ -35,7 +35,7 @@ In my final project I made a moving pixel sunset image. It was a hard and funny 
 {% endraw %}
 
 {% raw %}
-<iframe src="content/day01/Project03/embed.html?v=1" width="100%" height="450" frameborder="no"></iframe>
+<iframe src="content/day01/Project03/embed.html?v=2" width="100%" height="450" frameborder="no"></iframe>
 {% endraw %}
 
 ```js
