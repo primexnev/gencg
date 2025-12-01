@@ -7,10 +7,9 @@ let cols, rows;
 let t = 0;
 
 function setup() {
-  createCanvas(640, 480);
+  createCanvas(windowWidth, windowHeight);
   noStroke();
-  cols = ceil(width / cellSize);
-  rows = ceil(height / cellSize);
+  recalcGrid();
 }
 
 function draw() {
@@ -97,6 +96,17 @@ function draw() {
   }
 }
 
+function recalcGrid() {
+  // Hücre boyutunu ekran boyutuna göre ayarla (yakın görünümü engelle)
+  cellSize = max(8, round(min(windowWidth, windowHeight) / 40));
+  cols = ceil(windowWidth / cellSize);
+  rows = ceil(windowHeight / cellSize);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  recalcGrid();
+}
 // Rengi güvenli şekilde aydınlatan helper fonksiyon
 function brighten(col, amt) {
   let r = constrain(red(col) + amt, 0, 255);
