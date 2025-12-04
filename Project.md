@@ -320,30 +320,17 @@ function windowResized() {
 }
 ```
 
-### IMAGE02
-{% raw %}
-![Example Image](./content/day01/04/week401.jpg)
-{% endraw %}
+# Final Project
 
-{% raw %}
-<iframe src="content/day01/04.02/embed.html" width="100%" height="450" frameborder="no"></iframe>
-{% endraw %}
-
-
-# Week 4
 
 ## Exploration & Experimentation
-FFor this week’s project, I explored how time and energy could be visualized as motion and light rather than as numeric information. I created two complementary visual systems: one based on dark, hand-drawn, ink-like strokes expanding from a circular void, and another inspired by Doctor Strange’s portal, a rotating ring of glowing energy lines that constantly shift and breathe. The first experiment expresses time as accumulation: every drawn stroke represents a passing moment that slowly builds density around an empty center. The second experiment treats time as flow, with luminous particles and rotating arcs that continuously circulate, fade, and re-emerge. Together, both systems capture time as transformation, something fluid, cyclic, and alive.
+I built the pixel‑sunset in three iterations that match the visuals above. Iteration I (`Project01`) tests layout and palette with flat color bands, a sun, and blocky waves. Iteration II (`Project02`) switches to a grid: each cell blends sky/sea gradients and animates waves with sine motion; a soft cloud and larger sun add depth. Iteration III (`Project03`) adds story and motion—dolphins jump on arcs, the shoreline “breathes,” and two people sit on the beach watching the sunset.
 
 ## Influences & References
-Visually, the project was influenced by the mechanical precision of drawing machines and the cinematic aesthetics of Doctor Strange’s magical portals. The white-on-black drawings recall the physical traces of ink and charcoal, while the glowing orange portal reflects kinetic light installations and the idea of energy made visible. Conceptually, I was inspired by cyclical time and the idea of portals as thresholds between moments. Both drawings emphasize repetition, rhythm, and constant change, connecting natural cycles, motion, and perception.
-
-
-
+I followed the “pixels as material” idea and used my sunset reference image to guide palette and structure (sky–horizon–sea–beach). I also reviewed simple p5.js patterns (lerpColor, noise, sin) to keep the system readable while capturing the scene’s mood.
 
 ## Algorithmic Thinking
-Both visual systems were built through generative algorithms in p5.js. The white-on-black “charcoal clock” uses random vector directions and Perlin noise to generate hundreds of small strokes orbiting around an invisible core. Each stroke fades slightly, creating an evolving density pattern that never repeats exactly. The portal version relies on trigonometric motion, layered transparency, and additive color blending. Particles rotate along circular paths with slight phase offsets, producing glowing segments and sparks that simulate rotating energy. In both, time is mapped to motion speed and rotational phase, thus even without digits, the system behaves like a temporal organism that breathes, rotates, and regenerates over time.
-
+All sketches share a grid. Each cell decides whether it is sky, sea, or beach by comparing y to the horizon/shoreline. Colors come from vertical gradients; waves use `sin(x,t)`; cells near the shore are brightened. In Iteration III, dolphins are parametric shapes that move along timed arcs; the seated couple are small block silhouettes. The canvas and `cellSize` are responsive so the iframes fill their boxes, and a handful of parameters (cell size, speeds, colors) control variety with minimal code.
 
 ## Critical Reflection
-This project showed me that time can be communicated not only through structure but also through sensation. By shifting from measurable units to visual energy, I transformed the concept of a clock into a living, responsive environment. The contrast between the two experiments, the quiet, hand-drawn void and the intense, luminous portal, revealed how the same concept can evoke very different emotions depending on form and medium. Working with randomness and light decay taught me to find balance between control and unpredictability, enough order to remain readable yet enough chaos to feel organic. Ultimately, these drawings visualize time as motion, rhythm, and transformation, an endless cycle of creation and dissolution rather than a sequence of numbers.
+Working directly with pixel cells made composition choices explicit. The hardest part was choosing a `cellSize` that feels crisp without noise. Evolving from flat bands to animated agents improved readability and interest without overcomplicating the rules. Next, I’d sample colors from the reference image and add seeding/saving to reproduce favorite frames.
