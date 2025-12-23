@@ -27,11 +27,12 @@ In my final project I made a moving pixel sunset image. It was a hard and funny 
 
 
 ### Iteration III: 
-- The scene still felt a bit empty—just sea, sky, and sun so I added a beach and dolphins that swim and jump. I also gave the sea some random motion and added moving clouds to make the pixel scene feel more alive. Now the sunset with swimming dolphins feels much richer.
+- The scene still felt a bit empty just sea, sky, and sun so I added a beach and dolphins that swim and jump. I also gave the sea some random motion and added moving clouds to make the pixel scene feel more alive. Now the sunset with swimming dolphins feels much richer.
 
 
 
-## REFERENCE IMAGE
+
+## Reference Image
 {% raw %}
 ![Sunset Reference](./content/day01/06/sunset.png)
 {% endraw %}
@@ -129,7 +130,8 @@ function draw() {
         let topColor = color(255, 140, 120);
         let bottomColor = color(80, 90, 200);
         baseCol = lerpColor(topColor, bottomColor, amt);
-      } else if (cy < shoreY) {
+      } 
+      else if (cy < shoreY) {
         // SEA
         let amt = (cy - horizonY) / (shoreY - horizonY + 1);
         let topSea = color(20, 40, 130);
@@ -207,7 +209,7 @@ function draw() {
         }
       }
 
-      // --- PEOPLE ON THE BEACH (couple watching the sunset) ---
+      // --- PEOPLE ON THE BEACH (Which is a failiure in my project) ---
       let peopleColor = color(40, 25, 35);
       if (cy > baseShoreY) {
         // Man
@@ -330,7 +332,15 @@ I built the pixel‑sunset in three iterations that match the visuals above. Ite
 I followed the “pixels as material” idea and used my sunset reference image to guide palette and structure (sky–horizon–sea–beach). I also reviewed simple p5.js patterns (lerpColor, noise, sin) to keep the system readable while capturing the scene’s mood.
 
 ## Algorithmic Thinking
-All sketches share a grid. Each cell decides whether it is sky, sea, or beach by comparing y to the horizon/shoreline. Colors come from vertical gradients; waves use `sin(x,t)`; cells near the shore are brightened. In Iteration III, dolphins are parametric shapes that move along timed arcs; the seated couple are small block silhouettes. The canvas and `cellSize` are responsive so the iframes fill their boxes, and a handful of parameters (cell size, speeds, colors) control variety with minimal code.
+All sketches share a grid. Each cell decides whether it is sky, sea, or beach by comparing y to the horizon/shoreline. Colors come from vertical gradients; waves use `sin(x,t)`; cells near the shore are brightened. In Iteration III, dolphins are parametric shapes that move along timed arcs, the seated couple are small block silhouettes(which doesnt work). The canvas and `cellSize` are responsive so the iframes fill their boxes, and a handful of parameters (cell size, speeds, colors) control variety with minimal code.
+
+## Challenges
+- Make sky–horizon–sea palette transitions readable
+- Balance detail and performance via cell size (too small = noise; too large = loss of detail)
+- Give wave motion a lively feel without flicker
+- Reduce emptiness in composition (beach, dolphins, and clouds to “tell a story”)
+- Preserve proportions with responsive behavior across screens
+
 
 ## Critical Reflection
 Working directly with pixel cells made composition choices explicit. The hardest part was choosing a `cellSize` that feels crisp without noise. Evolving from flat bands to animated agents improved readability and interest without overcomplicating the rules. Next, I’d sample colors from the reference image and add seeding/saving to reproduce favorite frames.
